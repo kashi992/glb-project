@@ -26,13 +26,6 @@ export default function App() {
     }
   }, [])
   return (
-    // <Canvas
-    //   style={{ width: "100vw", height: "100vh", touchAction: "none" }}
-    //   camera={{ position: [0, 0, 6], fov: 45 }}
-    // >
-    // </Canvas>
       <Scene />
-
-
   )
 }
