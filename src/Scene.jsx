@@ -157,15 +157,15 @@ function Sidebar({ hotspot, onClose }) {
   const videoData = {
     A: { 
       thumbnail: "/thumbnails/thumb1.jpg", 
-      video: "/videos/video1.mp4" 
+      video: "/videos/video2.mp4" 
     },
     B: { 
   thumbnail: "/thumbnails/thumb1.jpg", 
-      video: "/videos/video1.mp4" 
+      video: "/videos/video2.mp4" 
     },
     C: { 
      thumbnail: "/thumbnails/thumb1.jpg", 
-      video: "/videos/video1.mp4" 
+      video: "/videos/video2.mp4" 
     },
   }
 
