@@ -1,10 +1,77 @@
 import * as THREE from "three"
 import { Canvas, useThree, useFrame } from "@react-three/fiber"
 import { OrbitControls, useGLTF, Html } from "@react-three/drei"
-import { useLayoutEffect, useMemo, useRef,React, useState } from "react"
+import { useLayoutEffect, useMemo, useRef, useState } from "react"
 
-function Sidebar({ hotspot, onClose }) {
-  if (!hotspot) return null
+function VideoThumbnail({ thumbnailUrl, onClick }) {
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "180px",
+        borderRadius: "8px",
+        overflow: "hidden",
+        cursor: "pointer",
+        backgroundImage: `url(${thumbnailUrl})`,
+        backgroundSize: "cover",
+        backgroundPosition:  "center",
+        transition: "transform 0.3s",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "scale(1.05)"
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "scale(1)"
+      }}
+    >
+      {/* Dark Overlay */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "rgba(0,0,0,0.3)",
+          transition: "background 0.3s",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = "rgba(0,0,0,0.5)"
+        }}
+      />
+
+      {/* Play Button */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "60px",
+          height: "60px",
+          borderRadius: "50%",
+          background: "rgba(59, 130, 246, 0.9)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "all 0.3s",
+        }}
+      >
+        <div
+          style={{
+            width: 0,
+            height: 0,
+            borderLeft: "18px solid white",
+            borderTop: "12px solid transparent",
+            borderBottom: "12px solid transparent",
+            marginLeft: "4px",
+          }}
+        />
+      </div>
+    </div>
+  )
+}
+function VideoModal({ videoUrl, onClose }) {
+  if (!videoUrl) return null
 
   return (
     <div
@@ -12,6 +79,102 @@ function Sidebar({ hotspot, onClose }) {
         position: "fixed",
         top: 0,
         left: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "rgba(0, 0, 0, 0.95)",
+        zIndex: 2000,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        animation: "fadeIn 0.3s ease",
+      }}
+      onClick={onClose}
+    >
+      <style>
+        {`
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+        `}
+      </style>
+
+      {/* Close Button */}
+      <button
+        onClick={onClose}
+        style={{
+          position: "absolute",
+          top: "30px",
+          right: "30px",
+          background: "rgba(255,255,255,0.2)",
+          border: "2px solid rgba(255,255,255,0.3)",
+          color: "#fff",
+          width: "50px",
+          height: "50px",
+          borderRadius: "50%",
+          cursor: "pointer",
+          fontSize:  "24px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "all 0.3s",
+          zIndex: 2001,
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = "rgba(255,255,255,0.3)"
+          e.target.style.transform = "scale(1.1)"
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = "rgba(255,255,255,0.2)"
+          e.target.style.transform = "scale(1)"
+        }}
+      >
+        ✕
+      </button>
+
+      {/* Video Player */}
+      <video
+        src={videoUrl}
+        controls
+        autoPlay
+        style={{
+          maxWidth: "90%",
+          maxHeight: "90%",
+          borderRadius: "8px",
+          boxShadow: "0 10px 50px rgba(0,0,0,0.5)",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      />
+    </div>
+  )
+}
+
+function Sidebar({ hotspot, onClose }) {
+  const [videoUrl, setVideoUrl] = useState(null)
+  if (!hotspot) return null
+
+   // Video data for each hotspot
+  const videoData = {
+    A: { 
+      thumbnail: "/thumbnails/thumb1.jpg", 
+      video: "/videos/video1.mp4" 
+    },
+    B: { 
+  thumbnail: "/thumbnails/thumb1.jpg", 
+      video: "/videos/video1.mp4" 
+    },
+    C: { 
+     thumbnail: "/thumbnails/thumb1.jpg", 
+      video: "/videos/video1.mp4" 
+    },
+  }
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left:  0,
         width: "400px",
         height: "100vh",
         background: "linear-gradient(135deg, #1e293b 0%, #334155 100%)",
@@ -75,9 +238,11 @@ function Sidebar({ hotspot, onClose }) {
         marginTop: 0, 
         marginBottom: "10px",
         fontSize: "28px",
-        fontWeight: "700"
+        fontWeight: "700",
+        paddingRight: "30px",
       }}>
-        {hotspot.label}
+        UGL Projects Where this system has been used:
+        <span style={{display:"none"}}>{hotspot.label}</span>
       </h2>
 
       <div style={{
@@ -89,7 +254,7 @@ function Sidebar({ hotspot, onClose }) {
       }}></div>
 
       <div style={{ fontSize: "15px", lineHeight: "1.7" }}>
-        <section style={{ marginBottom: "25px" }}>
+        <div style={{ marginBottom: "25px",display:'none' }}>
           <h3 style={{ 
             fontSize: "18px", 
             marginBottom: "12px",
@@ -98,17 +263,18 @@ function Sidebar({ hotspot, onClose }) {
             Overview
           </h3>
           <p style={{ margin: 0, color: "#cbd5e1" }}>
-            {hotspot.id === "A" && "Advanced data management and control systems for monitoring industrial operations in real-time."}
+            {hotspot.id === "A" && "Advanced data management and control systems for monitoring industrial operations in real-time. "}
             {hotspot.id === "B" && "Critical pipeline infrastructure responsible for fluid transportation across the facility."}
-            {hotspot.id === "C" && "Large-scale storage tanks for material containment and distribution management."}
+            {hotspot. id === "C" && "Large-scale storage tanks for material containment and distribution management."}
           </p>
-        </section>
+        </div>
 
-        <section style={{ marginBottom: "25px" }}>
+        <div style={{ marginBottom: "25px" }}>
           <h3 style={{ 
             fontSize:  "18px", 
             marginBottom: "12px",
-            color: "#60a5fa"
+            color: "#60a5fa",
+            display:'none'
           }}>
             Specifications
           </h3>
@@ -119,90 +285,53 @@ function Sidebar({ hotspot, onClose }) {
           }}>
             {hotspot.id === "A" && (
               <>
-                <li>Control Units: 12 nodes</li>
-                <li>Processing Speed: 2.4 GHz</li>
-                <li>Network:  Redundant fiber</li>
-                <li>Uptime: 99.9%</li>
+                <li>Cross River Rail</li>
+                <li>Sydney Metro</li>
+                <li>Transmission Line West</li>
               </>
             )}
             {hotspot.id === "B" && (
               <>
-                <li>Diameter:  24 inches</li>
-                <li>Material: Carbon steel</li>
-                <li>Pressure: 150 PSI</li>
-                <li>Flow Rate: 500 GPM</li>
+             <li>Cross River Rail</li>
+                <li>Sydney Metro</li>
+                <li>Transmission Line West</li>
               </>
             )}
             {hotspot.id === "C" && (
               <>
-                <li>Capacity: 50,000 gallons</li>
-                <li>Material: Stainless steel</li>
-                <li>Temperature: -20°C to 80°C</li>
-                <li>Safety: Auto pressure relief</li>
+            <li>Cross River Rail</li>
+                <li>Sydney Metro</li>
+                <li>Transmission Line West</li>
               </>
             )}
           </ul>
-        </section>
+        </div>
 
-        <section style={{ marginBottom: "25px" }}>
+        <div style={{ marginBottom: "25px" }}>
           <h3 style={{ 
             fontSize:  "18px", 
             marginBottom: "12px",
             color: "#60a5fa"
           }}>
-            Status
+            CASE STUDY
           </h3>
-          <div style={{ 
+          {/* <div style={{ 
             display: "flex", 
             gap: "10px",
             flexWrap: "wrap"
           }}>
-            <span style={{
-              padding: "6px 14px",
-              background: "rgba(34, 197, 94, 0.2)",
-              border: "1px solid rgba(34, 197, 94, 0.4)",
-              borderRadius: "20px",
-              fontSize: "13px",
-              color: "#86efac"
-            }}>
-              ✓ Operational
-            </span>
-            <span style={{
-              padding: "6px 14px",
-              background:  "rgba(59, 130, 246, 0.2)",
-              border: "1px solid rgba(59, 130, 246, 0.4)",
-              borderRadius: "20px",
-              fontSize:  "13px",
-              color:  "#93c5fd"
-            }}>
-              ⚡ Active
-            </span>
-            <span style={{
-              padding: "6px 14px",
-              background: "rgba(168, 85, 247, 0.2)",
-              border: "1px solid rgba(168, 85, 247, 0.4)",
-              borderRadius: "20px",
-              fontSize:  "13px",
-              color:  "#c4b5fd"
-            }}>
-              🔒 Secured
-            </span>
-          </div>
-        </section>
-
-        <section>
-          <h3 style={{ 
-            fontSize: "18px", 
-            marginBottom: "12px",
-            color: "#60a5fa"
-          }}>
-            Last Inspection
-          </h3>
-          <p style={{ margin: 0, color: "#cbd5e1" }}>
-            January 10, 2026 - No issues detected
-          </p>
-        </section>
+           Thumb of a video with a play Button. Onclick the play icon button open a modal to play the video in the whole screen.
+          </div> */}
+           <VideoThumbnail
+            thumbnailUrl={videoData[hotspot.id]?.thumbnail}
+            onClick={() => setVideoUrl(videoData[hotspot.id]?.video)}
+          />
+        </div>
       </div>
+      <VideoModal 
+        videoUrl={videoUrl} 
+        onClose={() => setVideoUrl(null)} 
+      />
     </div>
   )
 }
@@ -219,14 +348,14 @@ function Hotspot({ label, position, onClick, isHidden }) {
           onClick?. ()
         }}
       >
-        <sphereGeometry args={[0.05, 16, 16]} />
-        <meshStandardMaterial color="#3b82f6" />
+        <sphereGeometry args={[0.08, 16, 16]} />
+        <meshStandardMaterial color="#3b82f6" emissive="#3b82f6" emissiveIntensity={0.5} />
       </mesh>
 
-      {/* label text - BIGGER */}
+      {/* label text - MUCH BIGGER */}
       <Html
         center
-        distanceFactor={5}
+        distanceFactor={3.5}
         transform
         sprite
         style={{
@@ -242,24 +371,23 @@ function Hotspot({ label, position, onClick, isHidden }) {
           style={{
             background: "linear-gradient(135deg, rgba(59, 130, 246, 0.95) 0%, rgba(99, 102, 241, 0.95) 100%)",
             color: "#fff",
-            padding: "14px 28px",
-            borderRadius: "10px",
-            fontSize: "20px",
+            padding:  "30px",
+            borderRadius: "12px",
+            fontSize: "90px",
             fontWeight: "700",
             whiteSpace: "nowrap",
             cursor: "pointer",
             userSelect: "none",
-            boxShadow: "0 4px 15px rgba(0,0,0,0.4)",
-            border: "2px solid rgba(255,255,255,0.3)",
+            border: "2px solid rgba(255,255,255,0.4)",
             transition: "all 0.3s ease",
+            textTransform: "uppercase",
+            fontFamily: "sans-serif",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "scale(1.1)"
-            e.currentTarget. style.boxShadow = "0 6px 20px rgba(59, 130, 246, 0.6)"
+            e.currentTarget.style.transform = "scale(1.15)"
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style. transform = "scale(1)"
-            e.currentTarget.style. boxShadow = "0 4px 15px rgba(0,0,0,0.4)"
           }}
         >
           {label}
@@ -269,13 +397,15 @@ function Hotspot({ label, position, onClick, isHidden }) {
   )
 }
 
-function ModelWithHotspots({ activeHotspot, onHotspotClick }) {
+function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial }) {
   const controls = useRef()
   const { camera } = useThree()
   const { scene } = useGLTF("/model.glb")
 
   // Store model scale info
   const maxDimRef = useRef(1)
+  const initialCameraPos = useRef(new THREE.Vector3())
+  const initialCameraTarget = useRef(new THREE.Vector3())
 
   // Animation state
   const startLookAt = useRef(new THREE.Vector3())
@@ -284,11 +414,12 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick }) {
   const isFlying = useRef(false)
   const flyProgress = useRef(0)
   const pendingHotspot = useRef(null)
+  const isReturningHome = useRef(false)
 
   // Put hotspot points in MODEL LOCAL SPACE
   const hotspots = useMemo(
     () => [
-      { id: "A", label: "Data Systems", pos: [-15, 10, -15] },
+      { id: "A", label: "Data Systems", pos: [-5, 0.5, -15] },
       { id: "B", label: "Pipe Section", pos: [-5, 0.15, 0.25] },
       { id: "C", label: "Tank Area", pos: [10, 0.4, -0.2] },
     ],
@@ -299,7 +430,7 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick }) {
     const box = new THREE.Box3().setFromObject(scene)
     const center = box.getCenter(new THREE.Vector3())
     const size = box.getSize(new THREE.Vector3())
-    const maxDim = Math.max(size.x, size.y, size.z)
+    const maxDim = Math.max(size. x, size.y, size. z)
     maxDimRef.current = maxDim
 
     // center model
@@ -315,6 +446,10 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick }) {
     camera.lookAt(0, 0, 0)
     camera.updateProjectionMatrix()
 
+    // Store initial camera position
+    initialCameraPos.current. copy(camera.position)
+    initialCameraTarget.current.set(0, 0, 0)
+
     if (controls.current) {
       controls.current.target.set(0, 0, 0)
       controls.current.update()
@@ -326,7 +461,7 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick }) {
     if (!isFlying.current || !cameraCurve.current) return
 
     // Animation speed
-    const speed = 0.004
+    const speed = isReturningHome.current ? 0.006 : 0.004
     flyProgress.current = Math.min(flyProgress.current + speed, 1)
 
     // Smooth easing
@@ -351,26 +486,39 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick }) {
     controls.current?.update()
 
     // Stop when complete
-    if (flyProgress. current >= 1) {
+    if (flyProgress.current >= 1) {
       isFlying.current = false
       flyProgress.current = 0
-      if (controls.current) {
-        controls.current.enabled = true
-        // Keep rotation unlocked after animation
-        controls.current.minPolarAngle = Math.PI / 6
-        controls.current.maxPolarAngle = Math.PI / 2.2
-      }
       
-      // Show sidebar when animation completes
-      if (pendingHotspot.current) {
-        onHotspotClick(pendingHotspot.current)
-        pendingHotspot.current = null
+      if (isReturningHome.current) {
+        // Finished returning home
+        isReturningHome.current = false
+        if (controls.current) {
+          controls. current.enabled = true
+          // Lock back to horizontal rotation
+          controls.current.minPolarAngle = Math.PI / 2
+          controls.current.maxPolarAngle = Math.PI / 2
+        }
+      } else {
+        // Finished flying to hotspot
+        if (controls.current) {
+          controls.current.enabled = true
+          // Keep rotation unlocked after animation
+          controls.current.minPolarAngle = Math.PI / 6
+          controls.current.maxPolarAngle = Math.PI / 2.2
+        }
+        
+        // Show sidebar when animation completes
+        if (pendingHotspot.current) {
+          onHotspotClick(pendingHotspot.current)
+          pendingHotspot.current = null
+        }
       }
     }
   })
 
   const flyToHotspot = (hotspotLocal, hotspotData) => {
-    const maxDim = maxDimRef.current
+    const maxDim = maxDimRef. current
 
     // Target position (look-at point)
     const target = new THREE.Vector3(... hotspotLocal)
@@ -392,21 +540,22 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick }) {
     const p0 = camera.position. clone()
     const p1 = new THREE.Vector3(p0.x, p0.y + maxDim * 0.4, p0.z)
     const towardTarget = new THREE.Vector3().lerpVectors(p0, target, 0.25)
-    const p2 = new THREE.Vector3(towardTarget.x, p0.y + maxDim * 0.7, towardTarget.z)
+    const p2 = new THREE. Vector3(towardTarget.x, p0.y + maxDim * 0.7, towardTarget.z)
     const nearTarget = new THREE.Vector3().lerpVectors(p0, target, 0.6)
     const p3 = new THREE.Vector3(nearTarget.x, Math.max(p0.y, target.y) + maxDim * 0.7, nearTarget.z)
     const p4 = new THREE.Vector3(target.x, target.y + maxDim * 0.4, target.z)
-    const p5 = finalPos.clone()
+    const p5 = finalPos. clone()
 
     const curve = new THREE.CatmullRomCurve3([p0, p1, p2, p3, p4, p5], false, 'catmullrom', 0.2)
 
     cameraCurve.current = curve
-    startLookAt.current.copy(controls.current?.target || new THREE.Vector3(0, 0, 0))
+    startLookAt.current.copy(controls.current?. target || new THREE.Vector3(0, 0, 0))
     targetLookAt.current.copy(target)
     pendingHotspot.current = hotspotData
     
     flyProgress.current = 0
     isFlying.current = true
+    isReturningHome.current = false
 
     if (controls.current) {
       controls.current.minPolarAngle = 0
@@ -415,18 +564,63 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick }) {
     }
   }
 
+  const returnToInitial = () => {
+    const maxDim = maxDimRef.current
+
+    // Current position
+    const p0 = camera.position.clone()
+    
+    // Go up from current position
+    const p1 = new THREE.Vector3(p0.x, p0.y + maxDim * 0.5, p0.z)
+    
+    // High point moving toward center
+    const towardCenter = new THREE.Vector3().lerpVectors(p0, initialCameraTarget.current, 0.5)
+    const p2 = new THREE.Vector3(towardCenter.x, p1.y, towardCenter.z)
+    
+    // Above initial position
+    const p3 = new THREE.Vector3(
+      initialCameraPos.current.x,
+      initialCameraPos.current.y + maxDim * 0.3,
+      initialCameraPos.current.z
+    )
+    
+    // Final initial position
+    const p4 = initialCameraPos.current.clone()
+
+    const curve = new THREE.CatmullRomCurve3([p0, p1, p2, p3, p4], false, 'catmullrom', 0.2)
+
+    cameraCurve.current = curve
+    startLookAt. current.copy(controls.current?. target || new THREE.Vector3(0, 0, 0))
+    targetLookAt.current.copy(initialCameraTarget. current)
+    
+    flyProgress.current = 0
+    isFlying.current = true
+    isReturningHome.current = true
+
+    if (controls. current) {
+      controls.current.enabled = false
+    }
+  }
+
+  // Expose returnToInitial to parent
+  useLayoutEffect(() => {
+    if (onReturnToInitial) {
+      onReturnToInitial. current = returnToInitial
+    }
+  }, [onReturnToInitial])
+
   return (
     <>
       <primitive object={scene} />
 
-      {/* Hotspots */}
+      {/* Hotspots - HIDE ALL when any is active */}
       {hotspots.map((h) => (
         <Hotspot
           key={h.id}
           label={h.label}
           position={h.pos}
-          onClick={() => flyToHotspot(h.pos, h)}
-          isHidden={activeHotspot?.id === h. id}
+          onClick={() => flyToHotspot(h. pos, h)}
+          isHidden={activeHotspot !== null}
         />
       ))}
 
@@ -445,9 +639,14 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick }) {
 
 export default function Scene() {
   const [activeHotspot, setActiveHotspot] = useState(null)
+  const returnToInitialRef = useRef(null)
 
   const handleCloseSidebar = () => {
     setActiveHotspot(null)
+    // Trigger return to initial position
+    if (returnToInitialRef.current) {
+      returnToInitialRef.current()
+    }
   }
 
   return (
@@ -460,7 +659,8 @@ export default function Scene() {
         <directionalLight position={[5, 5, 5]} intensity={1.0} />
         <ModelWithHotspots 
           onHotspotClick={setActiveHotspot} 
-          activeHotspot={activeHotspot} 
+          activeHotspot={activeHotspot}
+          onReturnToInitial={returnToInitialRef}
         />
       </Canvas>
       
