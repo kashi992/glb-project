@@ -16,14 +16,14 @@ function VideoThumbnail({ thumbnailUrl, onClick }) {
         cursor: "pointer",
         backgroundImage: `url(${thumbnailUrl})`,
         backgroundSize: "cover",
-        backgroundPosition:  "center",
+        backgroundPosition:   "center",
         transition: "transform 0.3s",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget. style.transform = "scale(1.05)"
+        e.currentTarget.style.transform = "scale(1.05)"
       }}
       onMouseLeave={(e) => {
-        e.currentTarget. style.transform = "scale(1)"
+        e.currentTarget.style.transform = "scale(1)"
       }}
     >
       <div
@@ -34,7 +34,7 @@ function VideoThumbnail({ thumbnailUrl, onClick }) {
           transition: "background 0.3s",
         }}
         onMouseEnter={(e) => {
-          e.currentTarget. style.background = "rgba(0,0,0,0.5)"
+          e.currentTarget.  style.background = "rgba(0,0,0,0.5)"
         }}
       />
       <div
@@ -110,7 +110,7 @@ function VideoModal({ videoUrl, onClose }) {
           height: "50px",
           borderRadius: "50%",
           cursor: "pointer",
-          fontSize: "24px",
+          fontSize:   "24px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -167,7 +167,7 @@ function Sidebar({ hotspot, onClose }) {
       video: "/videos/video2.mp4"
     },
     E: {
-      thumbnail: "/thumbnails/thumb1.jpg",
+      thumbnail:   "/thumbnails/thumb1.jpg",
       video: "/videos/video2.mp4"
     },
   }
@@ -176,7 +176,7 @@ function Sidebar({ hotspot, onClose }) {
     <div
       style={{
         position: "fixed",
-        top: 0,
+        top:   0,
         left: 0,
         width: "350px",
         height: "100vh",
@@ -228,7 +228,7 @@ function Sidebar({ hotspot, onClose }) {
           e.target.style.transform = "scale(1.1)"
         }}
         onMouseLeave={(e) => {
-          e.target. style.background = "rgba(255,255,255,0.1)"
+          e.target.style.background = "rgba(255,255,255,0.1)"
           e.target.style.transform = "scale(1)"
         }}
       >
@@ -242,7 +242,7 @@ function Sidebar({ hotspot, onClose }) {
         fontWeight: "700",
         paddingRight: "30px",
       }}>
-        UGL Projects Where this system has been used:  
+        UGL Projects Where this system has been used:   
         <span style={{ display: "none" }}>{hotspot.label}</span>
       </h2>
 
@@ -265,8 +265,8 @@ function Sidebar({ hotspot, onClose }) {
           </h3>
           <p style={{ margin: 0, color: "#cbd5e1" }}>
             {hotspot.id === "A" && "Advanced data management and control systems for monitoring industrial operations in real-time.  "}
-            {hotspot.id === "B" && "Critical pipeline infrastructure responsible for fluid transportation across the facility. "}
-            {hotspot.id === "C" && "Large-scale storage tanks for material containment and distribution management."}
+            {hotspot. id === "B" && "Critical pipeline infrastructure responsible for fluid transportation across the facility.  "}
+            {hotspot. id === "C" && "Large-scale storage tanks for material containment and distribution management. "}
           </p>
         </div>
 
@@ -298,7 +298,7 @@ function Sidebar({ hotspot, onClose }) {
                 <li>Transmission Line West</li>
               </>
             )}
-            {hotspot. id === "C" && (
+            {hotspot.  id === "C" && (
               <>
                 <li>Cross River Rail</li>
                 <li>Sydney Metro</li>
@@ -352,7 +352,7 @@ function Hotspot({ label, position, onClick, isHidden }) {
       <mesh
         onClick={(e) => {
           e.stopPropagation()
-          onClick?. ()
+          onClick?.  ()
         }}
       >
         <sphereGeometry args={[0.08, 16, 16]} />
@@ -371,7 +371,7 @@ function Hotspot({ label, position, onClick, isHidden }) {
       >
         <div
           onClick={(e) => {
-            e. stopPropagation()
+            e.  stopPropagation()
             onClick?.()
           }}
           style={{
@@ -389,10 +389,10 @@ function Hotspot({ label, position, onClick, isHidden }) {
             boxShadow: "0 1rem 3rem rgba(255,255,255,1)",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget. style.transform = "scale(1.15)"
+            e.currentTarget.  style.transform = "scale(1.15)"
           }}
           onMouseLeave={(e) => {
-            e. currentTarget.style.transform = "scale(1)"
+            e.  currentTarget. style.transform = "scale(1)"
           }}
         >
           {label}
@@ -413,13 +413,15 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial })
   const savedCameraTarget = useRef(new THREE.Vector3())
 
   const startPos = useRef(new THREE.Vector3())
-  const endPos = useRef(new THREE.Vector3())
+  const endPos = useRef(new THREE.  Vector3())
   const startTarget = useRef(new THREE.Vector3())
   const endTarget = useRef(new THREE.Vector3())
   
   const isAnimating = useRef(false)
   const animProgress = useRef(0)
   const isReturning = useRef(false)
+  
+  const pendingHotspotData = useRef(null)
 
   const hotspots = useMemo(
     () => [
@@ -446,31 +448,54 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial })
 
     camera.near = maxDim / 100
     camera.far = maxDim * 100
-    camera.position.set(0, maxDim * 0.2, distance * 0.5)
-    camera.lookAt(0, 0, 0)
+    
+    // YOUR EXACT DESIRED CAMERA POSITION!  
+    camera.position.set(2.39, 26.69, 63.85)
+    
+    // Look at center
+    const lookAtPoint = new THREE.Vector3(0, 0, 0)
+    camera.lookAt(lookAtPoint)
     camera.updateProjectionMatrix()
 
+    // Calculate the polar angle from YOUR position (67.33°)
+    const currentPolarAngle = Math.atan2(
+      Math.sqrt(camera.position.x * camera.position.x + camera. position.z * camera.position. z),
+      camera.position. y
+    )
+
     if (controls.current) {
-      controls.current.target.set(0, 0, 0)
+      controls.current.target.copy(lookAtPoint)
+      
+      // LOCKED TO YOUR DESIRED ANGLE - X-axis rotation only
+      controls.current.minPolarAngle = currentPolarAngle
+      controls.current.maxPolarAngle = currentPolarAngle
+      
       controls.current.update()
     }
+
+    console.log("✅ CAMERA LOCKED TO YOUR DESIRED POSITION:")
+    console.log("  Position: { x: 2.39, y: 26.69, z: 63.85 }")
+    console.log("  Target: { x: 0.00, y: 0.00, z: 0.00 }")
+    console.log("  Distance: 69.25")
+    console.log("  Tilt angle: 67.33°")
+    console.log("  🔒 Zoom:  DISABLED")
+    console.log("  🔒 Vertical rotation: LOCKED")
+    console.log("  ✅ Horizontal rotation: ENABLED")
+    
   }, [scene, camera])
 
   useFrame(() => {
-    if (! isAnimating.current) return
+    if (!  isAnimating.current) return
 
-    // SLOW, SMOOTH INCREMENT
     const speed = 0.008
     animProgress.current = Math.min(animProgress.current + speed, 1)
 
-    // SMOOTHSTEP EASING - Very gentle
     const smoothstep = (t) => {
       return t * t * (3 - 2 * t)
     }
 
-    const t = smoothstep(animProgress.current)
+    const t = smoothstep(animProgress.  current)
 
-    // Direct interpolation - NO curves, NO snapping
     camera.position.lerpVectors(startPos.current, endPos.current, t)
     
     if (controls.current) {
@@ -478,22 +503,32 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial })
       controls.current.update()
     }
 
-    // Animation complete
     if (animProgress.current >= 1) {
       isAnimating.current = false
       animProgress.current = 0
 
-      if (isReturning.current) {
-        isReturning. current = false
+      if (isReturning. current) {
+        isReturning.current = false
         
-        // CRITICAL: Wait one frame before re-enabling controls
         setTimeout(() => {
           if (controls.current) {
-            controls.current.enabled = true
+            controls.  current.enabled = true
+            
+            // Restore the locked angle when returning
+            const returnPolarAngle = Math.atan2(
+              Math.sqrt(savedCameraPos.current.x * savedCameraPos.current.x + savedCameraPos.current. z * savedCameraPos.current.z),
+              savedCameraPos.current.y
+            )
+            controls.current.  minPolarAngle = returnPolarAngle
+            controls.current. maxPolarAngle = returnPolarAngle
           }
-        }, 16) // Wait one frame
+        }, 16)
       } else {
-        // Arrived at hotspot
+        if (pendingHotspotData.current) {
+          onHotspotClick(pendingHotspotData.current)
+          pendingHotspotData.current = null
+        }
+        
         if (controls.current) {
           controls.current.enabled = true
           controls.current.minPolarAngle = Math.PI / 6
@@ -504,12 +539,11 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial })
   })
 
   const flyToHotspot = (hotspotLocal, hotspotData) => {
-    // Save CURRENT position
-    savedCameraPos.current. copy(camera.position)
-    savedCameraTarget.current.copy(controls.current?. target || new THREE.Vector3(0, 0, 0))
+    savedCameraPos.current.  copy(camera.position)
+    savedCameraTarget.current.copy(controls.current?. target || new THREE.  Vector3(0, 0, 0))
 
     const maxDim = maxDimRef.current
-    const target = new THREE.Vector3(... hotspotLocal)
+    const target = new THREE.Vector3(...  hotspotLocal)
     const zoomDistance = Math.max(maxDim * 0.3, 0.5)
 
     const dirFromTarget = new THREE.Vector3(
@@ -521,46 +555,42 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial })
     const finalPos = target.clone().add(dirFromTarget.multiplyScalar(zoomDistance))
     finalPos.y = target.y + maxDim * 0.15
 
-    // Set start and end positions
-    startPos.current.copy(camera.position)
+    startPos.current.copy(camera. position)
     endPos.current.copy(finalPos)
-    startTarget.current.copy(controls.current?.target || new THREE.Vector3(0, 0, 0))
+    startTarget.current.copy(controls.current?.target || new THREE. Vector3(0, 0, 0))
     endTarget.current.copy(target)
 
     animProgress.current = 0
     isAnimating.current = true
     isReturning.current = false
 
+    pendingHotspotData.current = hotspotData
+
     if (controls.current) {
       controls.current.minPolarAngle = 0
       controls.current.maxPolarAngle = Math.PI
       controls.current.enabled = false
     }
-
-    // Show sidebar immediately (don't wait for animation)
-    onHotspotClick(hotspotData)
   }
 
   const returnToSavedPosition = () => {
-    // Set start and end positions
-    startPos.current.copy(camera.position)
-    endPos.current. copy(savedCameraPos.current)
-    startTarget.current. copy(controls.current?.target || new THREE. Vector3(0, 0, 0))
-    endTarget.current.copy(savedCameraTarget.current)
+    startPos.current.copy(camera.  position)
+    endPos.current.copy(savedCameraPos.  current)
+    startTarget.current.copy(controls.current?.target || new THREE.Vector3(0, 0, 0))
+    endTarget.current.copy(savedCameraTarget. current)
 
     animProgress.current = 0
     isAnimating.current = true
     isReturning.current = true
 
     if (controls.current) {
-      controls.current. enabled = false
-      // DON'T change polar angles until animation completes
+      controls.current.enabled = false
     }
   }
 
   useLayoutEffect(() => {
     if (onReturnToInitial) {
-      onReturnToInitial. current = returnToSavedPosition
+      onReturnToInitial.  current = returnToSavedPosition
     }
   }, [onReturnToInitial])
 
@@ -573,7 +603,7 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial })
           key={h.id}
           label={h.label}
           position={h.pos}
-          onClick={() => flyToHotspot(h. pos, h)}
+          onClick={() => flyToHotspot(h.pos, h)}
           isHidden={activeHotspot !== null}
         />
       ))}
@@ -582,8 +612,6 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial })
         ref={controls}
         enableZoom={false}
         enablePan={false}
-        minPolarAngle={Math. PI / 2}
-        maxPolarAngle={Math.PI / 2}
         enableDamping={true}
         dampingFactor={0.05}
         makeDefault
