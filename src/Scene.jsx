@@ -16,17 +16,16 @@ function VideoThumbnail({ thumbnailUrl, onClick }) {
         cursor: "pointer",
         backgroundImage: `url(${thumbnailUrl})`,
         backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundPosition:  "center",
         transition: "transform 0.3s",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "scale(1.05)"
+        e.currentTarget. style.transform = "scale(1.05)"
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "scale(1)"
+        e.currentTarget. style.transform = "scale(1)"
       }}
     >
-      {/* Dark Overlay */}
       <div
         style={{
           position: "absolute",
@@ -35,11 +34,9 @@ function VideoThumbnail({ thumbnailUrl, onClick }) {
           transition: "background 0.3s",
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = "rgba(0,0,0,0.5)"
+          e.currentTarget. style.background = "rgba(0,0,0,0.5)"
         }}
       />
-
-      {/* Play Button */}
       <div
         style={{
           position: "absolute",
@@ -70,6 +67,7 @@ function VideoThumbnail({ thumbnailUrl, onClick }) {
     </div>
   )
 }
+
 function VideoModal({ videoUrl, onClose }) {
   if (!videoUrl) return null
 
@@ -99,7 +97,6 @@ function VideoModal({ videoUrl, onClose }) {
         `}
       </style>
 
-      {/* Close Button */}
       <button
         onClick={onClose}
         style={{
@@ -132,7 +129,6 @@ function VideoModal({ videoUrl, onClose }) {
         ✕
       </button>
 
-      {/* Video Player */}
       <video
         src={videoUrl}
         controls
@@ -153,7 +149,6 @@ function Sidebar({ hotspot, onClose }) {
   const [videoUrl, setVideoUrl] = useState(null)
   if (!hotspot) return null
 
-  // Video data for each hotspot
   const videoData = {
     A: {
       thumbnail: "/thumbnails/thumb1.jpg",
@@ -209,7 +204,6 @@ function Sidebar({ hotspot, onClose }) {
         `}
       </style>
 
-      {/* Close Button */}
       <button
         onClick={onClose}
         style={{
@@ -234,14 +228,13 @@ function Sidebar({ hotspot, onClose }) {
           e.target.style.transform = "scale(1.1)"
         }}
         onMouseLeave={(e) => {
-          e.target.style.background = "rgba(255,255,255,0.1)"
+          e.target. style.background = "rgba(255,255,255,0.1)"
           e.target.style.transform = "scale(1)"
         }}
       >
         ✕
       </button>
 
-      {/* Content */}
       <h2 style={{
         marginTop: 0,
         marginBottom: "10px",
@@ -249,7 +242,7 @@ function Sidebar({ hotspot, onClose }) {
         fontWeight: "700",
         paddingRight: "30px",
       }}>
-        UGL Projects Where this system has been used:
+        UGL Projects Where this system has been used:  
         <span style={{ display: "none" }}>{hotspot.label}</span>
       </h2>
 
@@ -271,8 +264,8 @@ function Sidebar({ hotspot, onClose }) {
             Overview
           </h3>
           <p style={{ margin: 0, color: "#cbd5e1" }}>
-            {hotspot.id === "A" && "Advanced data management and control systems for monitoring industrial operations in real-time. "}
-            {hotspot.id === "B" && "Critical pipeline infrastructure responsible for fluid transportation across the facility."}
+            {hotspot.id === "A" && "Advanced data management and control systems for monitoring industrial operations in real-time.  "}
+            {hotspot.id === "B" && "Critical pipeline infrastructure responsible for fluid transportation across the facility. "}
             {hotspot.id === "C" && "Large-scale storage tanks for material containment and distribution management."}
           </p>
         </div>
@@ -305,7 +298,7 @@ function Sidebar({ hotspot, onClose }) {
                 <li>Transmission Line West</li>
               </>
             )}
-            {hotspot.id === "C" && (
+            {hotspot. id === "C" && (
               <>
                 <li>Cross River Rail</li>
                 <li>Sydney Metro</li>
@@ -337,15 +330,8 @@ function Sidebar({ hotspot, onClose }) {
           }}>
             CASE STUDY
           </h3>
-          {/* <div style={{ 
-            display: "flex", 
-            gap: "10px",
-            flexWrap: "wrap"
-          }}>
-           Thumb of a video with a play Button. Onclick the play icon button open a modal to play the video in the whole screen.
-          </div> */}
           <VideoThumbnail
-            thumbnailUrl={videoData[hotspot.id]?.thumbnail}
+            thumbnailUrl={videoData[hotspot. id]?.thumbnail}
             onClick={() => setVideoUrl(videoData[hotspot.id]?.video)}
           />
         </div>
@@ -363,18 +349,16 @@ function Hotspot({ label, position, onClick, isHidden }) {
 
   return (
     <group position={position}>
-      {/* click target */}
       <mesh
         onClick={(e) => {
           e.stopPropagation()
-          onClick?.()
+          onClick?. ()
         }}
       >
         <sphereGeometry args={[0.08, 16, 16]} />
         <meshStandardMaterial color="#3b82f6" emissive="#3b82f6" emissiveIntensity={0.5} />
       </mesh>
 
-      {/* label text - MUCH BIGGER */}
       <Html
         center
         distanceFactor={3.5}
@@ -387,11 +371,10 @@ function Hotspot({ label, position, onClick, isHidden }) {
       >
         <div
           onClick={(e) => {
-            e.stopPropagation()
+            e. stopPropagation()
             onClick?.()
           }}
           style={{
-            // background: "linear-gradient(135deg, rgba(59, 130, 246, 0.95) 0%, rgba(99, 102, 241, 0.95) 100%)",
             color: "#000",
             padding: "20px 30px",
             borderRadius: "12px",
@@ -400,17 +383,16 @@ function Hotspot({ label, position, onClick, isHidden }) {
             whiteSpace: "nowrap",
             cursor: "pointer",
             userSelect: "none",
-            // border: "2px solid rgba(255,255,255,0.4)",
             transition: "all 0.3s ease",
             textTransform: "uppercase",
             fontFamily: "sans-serif",
             boxShadow: "0 1rem 3rem rgba(255,255,255,1)",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "scale(1.15)"
+            e.currentTarget. style.transform = "scale(1.15)"
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "scale(1)"
+            e. currentTarget.style.transform = "scale(1)"
           }}
         >
           {label}
@@ -425,21 +407,20 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial })
   const { camera } = useThree()
   const { scene } = useGLTF("/model.glb")
 
-  // Store model scale info
   const maxDimRef = useRef(1)
-  const initialCameraPos = useRef(new THREE.Vector3())
-  const initialCameraTarget = useRef(new THREE.Vector3())
+  
+  const savedCameraPos = useRef(new THREE.Vector3())
+  const savedCameraTarget = useRef(new THREE.Vector3())
 
-  // Animation state
-  const startLookAt = useRef(new THREE.Vector3())
-  const targetLookAt = useRef(new THREE.Vector3())
-  const cameraCurve = useRef(null)
-  const isFlying = useRef(false)
-  const flyProgress = useRef(0)
-  const pendingHotspot = useRef(null)
-  const isReturningHome = useRef(false)
+  const startPos = useRef(new THREE.Vector3())
+  const endPos = useRef(new THREE.Vector3())
+  const startTarget = useRef(new THREE.Vector3())
+  const endTarget = useRef(new THREE.Vector3())
+  
+  const isAnimating = useRef(false)
+  const animProgress = useRef(0)
+  const isReturning = useRef(false)
 
-  // Put hotspot points in MODEL LOCAL SPACE
   const hotspots = useMemo(
     () => [
       { id: "A", label: "Data Systems", pos: [2.36, -1.90, 21.35] },
@@ -458,10 +439,8 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial })
     const maxDim = Math.max(size.x, size.y, size.z)
     maxDimRef.current = maxDim
 
-    // center model
     scene.position.sub(center)
 
-    // camera distance based on FOV
     const fov = camera.fov * (Math.PI / 180)
     const distance = maxDim / (2 * Math.tan(fov / 2))
 
@@ -471,87 +450,68 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial })
     camera.lookAt(0, 0, 0)
     camera.updateProjectionMatrix()
 
-    // Store initial camera position
-    initialCameraPos.current.copy(camera.position)
-    initialCameraTarget.current.set(0, 0, 0)
-
     if (controls.current) {
       controls.current.target.set(0, 0, 0)
       controls.current.update()
     }
   }, [scene, camera])
 
-  // SMOOTH DRONE ANIMATION
   useFrame(() => {
-    if (!isFlying.current || !cameraCurve.current) return
+    if (! isAnimating.current) return
 
-    // Animation speed
-    const speed = isReturningHome.current ? 0.006 : 0.004
-    flyProgress.current = Math.min(flyProgress.current + speed, 1)
+    // SLOW, SMOOTH INCREMENT
+    const speed = 0.008
+    animProgress.current = Math.min(animProgress.current + speed, 1)
 
-    // Smooth easing
-    const easeInOutCubic = (t) => {
-      return t < 0.5
-        ? 4 * t * t * t
-        : 1 - Math.pow(-2 * t + 2, 3) / 2
+    // SMOOTHSTEP EASING - Very gentle
+    const smoothstep = (t) => {
+      return t * t * (3 - 2 * t)
     }
 
-    const t = easeInOutCubic(flyProgress.current)
+    const t = smoothstep(animProgress.current)
 
-    // Get position along the smooth curve
-    const camPos = cameraCurve.current.getPoint(t)
-    camera.position.copy(camPos)
+    // Direct interpolation - NO curves, NO snapping
+    camera.position.lerpVectors(startPos.current, endPos.current, t)
+    
+    if (controls.current) {
+      controls.current.target.lerpVectors(startTarget.current, endTarget.current, t)
+      controls.current.update()
+    }
 
-    // Smoothly interpolate look-at target
-    const lookAt = new THREE.Vector3()
-    lookAt.lerpVectors(startLookAt.current, targetLookAt.current, t)
+    // Animation complete
+    if (animProgress.current >= 1) {
+      isAnimating.current = false
+      animProgress.current = 0
 
-    // Update controls target smoothly
-    controls.current?.target.copy(lookAt)
-    controls.current?.update()
-
-    // Stop when complete
-    if (flyProgress.current >= 1) {
-      isFlying.current = false
-      flyProgress.current = 0
-
-      if (isReturningHome.current) {
-        // Finished returning home
-        isReturningHome.current = false
-        if (controls.current) {
-          controls.current.enabled = true
-          // Lock back to horizontal rotation
-          controls.current.minPolarAngle = Math.PI / 2
-          controls.current.maxPolarAngle = Math.PI / 2
-        }
+      if (isReturning.current) {
+        isReturning. current = false
+        
+        // CRITICAL: Wait one frame before re-enabling controls
+        setTimeout(() => {
+          if (controls.current) {
+            controls.current.enabled = true
+          }
+        }, 16) // Wait one frame
       } else {
-        // Finished flying to hotspot
+        // Arrived at hotspot
         if (controls.current) {
           controls.current.enabled = true
-          // Keep rotation unlocked after animation
           controls.current.minPolarAngle = Math.PI / 6
           controls.current.maxPolarAngle = Math.PI / 2.2
-        }
-
-        // Show sidebar when animation completes
-        if (pendingHotspot.current) {
-          onHotspotClick(pendingHotspot.current)
-          pendingHotspot.current = null
         }
       }
     }
   })
 
   const flyToHotspot = (hotspotLocal, hotspotData) => {
+    // Save CURRENT position
+    savedCameraPos.current. copy(camera.position)
+    savedCameraTarget.current.copy(controls.current?. target || new THREE.Vector3(0, 0, 0))
+
     const maxDim = maxDimRef.current
-
-    // Target position (look-at point)
-    const target = new THREE.Vector3(...hotspotLocal)
-
-    // Calculate final camera position near target
+    const target = new THREE.Vector3(... hotspotLocal)
     const zoomDistance = Math.max(maxDim * 0.3, 0.5)
 
-    // Direction from target toward camera (in XZ plane)
     const dirFromTarget = new THREE.Vector3(
       camera.position.x - target.x,
       0,
@@ -561,76 +521,46 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial })
     const finalPos = target.clone().add(dirFromTarget.multiplyScalar(zoomDistance))
     finalPos.y = target.y + maxDim * 0.15
 
-    // CREATE DRONE CURVE
-    const p0 = camera.position.clone()
-    const p1 = new THREE.Vector3(p0.x, p0.y + maxDim * 0.4, p0.z)
-    const towardTarget = new THREE.Vector3().lerpVectors(p0, target, 0.25)
-    const p2 = new THREE.Vector3(towardTarget.x, p0.y + maxDim * 0.7, towardTarget.z)
-    const nearTarget = new THREE.Vector3().lerpVectors(p0, target, 0.6)
-    const p3 = new THREE.Vector3(nearTarget.x, Math.max(p0.y, target.y) + maxDim * 0.7, nearTarget.z)
-    const p4 = new THREE.Vector3(target.x, target.y + maxDim * 0.4, target.z)
-    const p5 = finalPos.clone()
+    // Set start and end positions
+    startPos.current.copy(camera.position)
+    endPos.current.copy(finalPos)
+    startTarget.current.copy(controls.current?.target || new THREE.Vector3(0, 0, 0))
+    endTarget.current.copy(target)
 
-    const curve = new THREE.CatmullRomCurve3([p0, p1, p2, p3, p4, p5], false, 'catmullrom', 0.2)
-
-    cameraCurve.current = curve
-    startLookAt.current.copy(controls.current?.target || new THREE.Vector3(0, 0, 0))
-    targetLookAt.current.copy(target)
-    pendingHotspot.current = hotspotData
-
-    flyProgress.current = 0
-    isFlying.current = true
-    isReturningHome.current = false
+    animProgress.current = 0
+    isAnimating.current = true
+    isReturning.current = false
 
     if (controls.current) {
       controls.current.minPolarAngle = 0
       controls.current.maxPolarAngle = Math.PI
       controls.current.enabled = false
     }
+
+    // Show sidebar immediately (don't wait for animation)
+    onHotspotClick(hotspotData)
   }
 
-  const returnToInitial = () => {
-    const maxDim = maxDimRef.current
+  const returnToSavedPosition = () => {
+    // Set start and end positions
+    startPos.current.copy(camera.position)
+    endPos.current. copy(savedCameraPos.current)
+    startTarget.current. copy(controls.current?.target || new THREE. Vector3(0, 0, 0))
+    endTarget.current.copy(savedCameraTarget.current)
 
-    // Current position
-    const p0 = camera.position.clone()
-
-    // Go up from current position
-    const p1 = new THREE.Vector3(p0.x, p0.y + maxDim * 0.5, p0.z)
-
-    // High point moving toward center
-    const towardCenter = new THREE.Vector3().lerpVectors(p0, initialCameraTarget.current, 0.5)
-    const p2 = new THREE.Vector3(towardCenter.x, p1.y, towardCenter.z)
-
-    // Above initial position
-    const p3 = new THREE.Vector3(
-      initialCameraPos.current.x,
-      initialCameraPos.current.y + maxDim * 0.3,
-      initialCameraPos.current.z
-    )
-
-    // Final initial position
-    const p4 = initialCameraPos.current.clone()
-
-    const curve = new THREE.CatmullRomCurve3([p0, p1, p2, p3, p4], false, 'catmullrom', 0.2)
-
-    cameraCurve.current = curve
-    startLookAt.current.copy(controls.current?.target || new THREE.Vector3(0, 0, 0))
-    targetLookAt.current.copy(initialCameraTarget.current)
-
-    flyProgress.current = 0
-    isFlying.current = true
-    isReturningHome.current = true
+    animProgress.current = 0
+    isAnimating.current = true
+    isReturning.current = true
 
     if (controls.current) {
-      controls.current.enabled = false
+      controls.current. enabled = false
+      // DON'T change polar angles until animation completes
     }
   }
 
-  // Expose returnToInitial to parent
   useLayoutEffect(() => {
     if (onReturnToInitial) {
-      onReturnToInitial.current = returnToInitial
+      onReturnToInitial. current = returnToSavedPosition
     }
   }, [onReturnToInitial])
 
@@ -638,13 +568,12 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial })
     <>
       <primitive object={scene} />
 
-      {/* Hotspots - HIDE ALL when any is active */}
       {hotspots.map((h) => (
         <Hotspot
           key={h.id}
           label={h.label}
           position={h.pos}
-          onClick={() => flyToHotspot(h.pos, h)}
+          onClick={() => flyToHotspot(h. pos, h)}
           isHidden={activeHotspot !== null}
         />
       ))}
@@ -653,10 +582,11 @@ function ModelWithHotspots({ activeHotspot, onHotspotClick, onReturnToInitial })
         ref={controls}
         enableZoom={false}
         enablePan={false}
-        minPolarAngle={Math.PI / 2}
+        minPolarAngle={Math. PI / 2}
         maxPolarAngle={Math.PI / 2}
-        enableDamping
+        enableDamping={true}
         dampingFactor={0.05}
+        makeDefault
       />
     </>
   )
@@ -668,7 +598,6 @@ export default function Scene() {
 
   const handleCloseSidebar = () => {
     setActiveHotspot(null)
-    // Trigger return to initial position
     if (returnToInitialRef.current) {
       returnToInitialRef.current()
     }
